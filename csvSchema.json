@@ -1,0 +1,27 @@
+{
+    "id": {
+        "required": true,
+        "type": "number"
+    },
+    "firstName": {
+        "required": true,
+        "type": "string"
+    },
+    "lastName": {
+        "required": false,
+        "type": "string"
+    },
+    "email": {
+        "required": true,
+        "type": "email"
+    },
+    "phoneNum": {
+        "required": false,
+        "type": "string",
+        "length": 10
+    },
+    "salary": {
+        "required": true,
+        "type": "number"
+    }
+}
