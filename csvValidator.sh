@@ -18,6 +18,7 @@ getColumnIndexByString () {
 
 keysToBeValidated="$(cat $2 | jq ".columnsToBeValidated | keys_unsorted" | tr ',' ' ' | tr ':' ' ')";
 arrayOfKeys=${keysToBeValidated:2:-2};
+isHeaderPresent="$(cat $2 | jq ".isHeaderPresent")"
 declare -a columnIndexesOfColumnsToBeValidated
 declare -a isRequiredValidationArray
 declare -a lengthValidationArray
@@ -30,7 +31,12 @@ do
     minLength="$(echo $columnSchema | jq '.minLength')";
     maxLength="$(echo $columnSchema | jq '.maxLength')";
     columnsInCSV="$(sed -n '1p' $1)";
-    columnIndex="$(getColumnIndexByString $columnsInCSV $key)";
+    if [[ $isHeaderPresent == "true" ]];
+    then
+        columnIndex="$(getColumnIndexByString $columnsInCSV $key)";
+    else
+        columnIndex=${key:1:-1}
+    fi
     columnIndexesOfColumnsToBeValidated[keyIndex]=$columnIndex;
     isRequiredValidationArray[keyIndex]=$isRequiredTrue
     lengthValidationArray[keyIndex]=$requiredLength
@@ -44,4 +50,4 @@ _lengthValidationArray=${lengthValidationArray[@]}
 _maxLengthValidationArray=${maxLengthValidationArray[@]}
 _minLengthValidationArray=${minLengthValidationArray[@]}
 
-awk -F , -v columnIndexs="$columnIndexs" -v _isRequiredValidationArray="$_isRequiredValidationArray" -v _lengthValidationArray="$_lengthValidationArray" -v _maxLengthValidationArray="$_maxLengthValidationArray" -v _minLengthValidationArray="$_minLengthValidationArray" -f schemaValidator.awk $1
+awk -F , -v isHeaderPresent="$isHeaderPresent" -v columnIndexs="$columnIndexs" -v _isRequiredValidationArray="$_isRequiredValidationArray" -v _lengthValidationArray="$_lengthValidationArray" -v _maxLengthValidationArray="$_maxLengthValidationArray" -v _minLengthValidationArray="$_minLengthValidationArray" -f schemaValidator.awk $1

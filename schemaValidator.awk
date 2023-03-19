@@ -14,7 +14,7 @@ function printMessage(errorType, row, column) {
 }
 
 {
-    if(NR != 1) {
+    if(isHeaderPresent!="true" || NR!=1) {
         len=split(columnIndexs,columnIndexsArr," ")
         split(_isRequiredValidationArray,isRequiredValidationArr," ")
         split(_lengthValidationArray,lengthValidationArr," ")
