@@ -5,11 +5,14 @@
     },
     "firstName": {
         "required": true,
-        "type": "string"
+        "type": "string",
+        "maxLength": 10
     },
     "lastName": {
         "required": false,
-        "type": "string"
+        "type": "string",
+        "maxLength": 10,
+        "minLength": 4
     },
     "email": {
         "required": true,

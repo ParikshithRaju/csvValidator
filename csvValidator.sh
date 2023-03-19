@@ -18,20 +18,24 @@ getColumnIndexByString () {
 
 keysToBeValidated="$(cat $2 | jq "keys_unsorted" | tr ',' ' ' | tr ':' ' ')";
 arrayOfKeys=${keysToBeValidated:2:-2};
+declare -a columnIndexesOfColumnsToBeValidated
+declare -a isRequiredValidationArray
+declare -a lengthValidationArray
+keyIndex=1
 for key in $arrayOfKeys
 do
     columnSchema="$(jq ".${key}" $2)";
     isRequiredTrue="$(echo $columnSchema | jq '.required')";
     requiredLength="$(echo $columnSchema | jq '.length')";
-    echo "Validating column $key"
     columnsInCSV="$(sed -n '1p' $1)";
     columnIndex="$(getColumnIndexByString $columnsInCSV $key)";
-    if [[ $isRequiredTrue == "true" ]];
-    then
-        awk -F ',' -v Index=$columnIndex '($Index == "" || $Index == "\n" || $Index == "\r") {print "Required field error in row " NR}' $1
-    fi
-    if [[ $requiredLength != "null" ]];
-    then
-        awk -F ',' -v Index=$columnIndex -v requiredLength=$requiredLength '(NR > 1 && length($Index) != requiredLength) {print "Length error in row " NR}' $1
-    fi
+    columnIndexesOfColumnsToBeValidated[keyIndex]=$columnIndex;
+    isRequiredValidationArray[keyIndex]=$isRequiredTrue
+    lengthValidationArray[keyIndex]=$requiredLength
+    (( ++keyIndex ))
 done
+columnIndexs=${columnIndexesOfColumnsToBeValidated[@]}
+_isRequiredValidationArray=${isRequiredValidationArray[@]}
+_lengthValidationArray=${lengthValidationArray[@]}
+
+awk -F , -v columnIndexs="$columnIndexs" -v _isRequiredValidationArray="$_isRequiredValidationArray" -v _lengthValidationArray="$_lengthValidationArray" -f schemaValidator.awk $1
