@@ -23,7 +23,7 @@
         },
         "phoneNum": {
             "required": false,
-            "type": "string",
+            "type": "number",
             "length": 10
         },
         "salary": {

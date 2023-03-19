@@ -9,6 +9,10 @@
             "required": true,
             "length": 3,
             "type": "number"
+        },
+        "3": {
+            "required": true,
+            "type": "date"
         }
     }
 }
