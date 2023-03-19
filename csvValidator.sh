@@ -19,6 +19,13 @@ getColumnIndexByString () {
 keysToBeValidated="$(cat $2 | jq ".columnsToBeValidated | keys_unsorted" | tr ',' ' ' | tr ':' ' ')";
 arrayOfKeys=${keysToBeValidated:2:-2};
 isHeaderPresent="$(cat $2 | jq ".isHeaderPresent")"
+delimiterInJson="$(cat $2 | jq ".delimiter")"
+if [[ $delimiterInJson == "null" ]];
+then
+    delimiter=","
+else
+    delimiter=${delimiterInJson:1:-1}
+fi
 declare -a columnIndexesOfColumnsToBeValidated
 declare -a isRequiredValidationArray
 declare -a lengthValidationArray
@@ -53,4 +60,4 @@ _maxLengthValidationArray=${maxLengthValidationArray[@]}
 _minLengthValidationArray=${minLengthValidationArray[@]}
 _typeValidationArray=${typeValidationArray[@]}
 
-awk -F , -v isHeaderPresent="$isHeaderPresent" -v columnIndexs="$columnIndexs" -v _isRequiredValidationArray="$_isRequiredValidationArray" -v _lengthValidationArray="$_lengthValidationArray" -v _maxLengthValidationArray="$_maxLengthValidationArray" -v _minLengthValidationArray="$_minLengthValidationArray" -v _typeValidationArray="$_typeValidationArray" -f schemaValidator.awk $1
+awk -F $delimiter -v isHeaderPresent="$isHeaderPresent" -v columnIndexs="$columnIndexs" -v _isRequiredValidationArray="$_isRequiredValidationArray" -v _lengthValidationArray="$_lengthValidationArray" -v _maxLengthValidationArray="$_maxLengthValidationArray" -v _minLengthValidationArray="$_minLengthValidationArray" -v _typeValidationArray="$_typeValidationArray" -f schemaValidator.awk $1
