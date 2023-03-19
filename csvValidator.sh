@@ -16,7 +16,7 @@ getColumnIndexByString () {
     done
 }
 
-keysToBeValidated="$(cat $2 | jq "keys_unsorted" | tr ',' ' ' | tr ':' ' ')";
+keysToBeValidated="$(cat $2 | jq ".columnsToBeValidated | keys_unsorted" | tr ',' ' ' | tr ':' ' ')";
 arrayOfKeys=${keysToBeValidated:2:-2};
 declare -a columnIndexesOfColumnsToBeValidated
 declare -a isRequiredValidationArray
@@ -24,7 +24,7 @@ declare -a lengthValidationArray
 keyIndex=1
 for key in $arrayOfKeys
 do
-    columnSchema="$(jq ".${key}" $2)";
+    columnSchema="$(jq ".columnsToBeValidated.${key}" $2)";
     isRequiredTrue="$(echo $columnSchema | jq '.required')";
     requiredLength="$(echo $columnSchema | jq '.length')";
     minLength="$(echo $columnSchema | jq '.minLength')";

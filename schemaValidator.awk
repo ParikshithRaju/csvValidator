@@ -1,3 +1,18 @@
+function printMessage(errorType, row, column) {
+    if(errorType=="required") {
+        print "Required field error: " "(" row "," column ")";
+    }
+    if(errorType=="length") {
+        print "Length validation error:  " "(" row "," column ")";
+    }
+    if(errorType=="maxLength"){
+        print "Max length error: " "(" row "," column ")";
+    }
+    if(errorType=="minLength"){
+        print "Min length error: " "(" row "," column ")";
+    }
+}
+
 {
     if(NR != 1) {
         len=split(columnIndexs,columnIndexsArr," ")
@@ -8,33 +23,25 @@
         for(i=1;i<=len;i++) {
             if(isRequiredValidationArr[i] == "true") {
                 if($columnIndexsArr[i]=="" || $columnIndexsArr[i]=="\n" || $columnIndexsArr[i]=="\r") {
-                    print "Required field error :" "("columnIndexsArr[i] "," NR ")"
-                    
-                    outputArr["required " i]=columnIndexsArr[i] " " NR
+                    printMessage("required",NR,columnIndexsArr[i]);
                     continue
                 }
             }
             if(lengthValidationArr[i] != "null") {
                 if(length($columnIndexsArr[i]) != lengthValidationArr[i]){
-                    print "Length validation error: " "(" columnIndexsArr[i] "," NR ")"
-                    outputArr["length " i]=columnIndexsArr[i] " " NR
+                    printMessage("length",NR,columnIndexsArr[i]);
                 }
             }
             if(maxLengthValidationArr[i] != "null") {
                 if(length($columnIndexsArr[i]) > maxLengthValidationArr[i]){
-                    print "Max length error " "(" columnIndexsArr[i] "," NR ")"
-                    outputArr["maxLength " i]=columnIndexsArr[i] " " NR
+                    printMessage("maxLength",NR,columnIndexsArr[i])
                 }
             }
             if(minLengthValidationArr[i] != "null") {
                 if(length($columnIndexsArr[i]) < minLengthValidationArr[i]){
-                    print "Min length error " "(" columnIndexsArr[i] "," NR ")"
-                    outputArr["minLength " i]=columnIndexsArr[i] " " NR
+                    printMessage("minLength",NR,columnIndexsArr[i])
                 }
             }
-        }
-        for(var in outputArr) {
-            print var " " outputArr[var]
         }
     }
 }
