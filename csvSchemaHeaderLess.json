@@ -1,0 +1,14 @@
+{
+    "isHeaderPresent": false,
+    "columnsToBeValidated": {
+        "1": {
+            "required": true,
+            "type": "number"
+        },
+        "2": {
+            "required": true,
+            "length": 3,
+            "type": "number"
+        }
+    }
+}
