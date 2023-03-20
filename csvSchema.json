@@ -4,7 +4,7 @@
     "columnsToBeValidated": {
         "id": {
             "required": true,
-            "type": "interger"
+            "type": "number"
         },
         "firstName": {
             "required": true,

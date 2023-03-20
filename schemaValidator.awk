@@ -18,6 +18,13 @@ function printMessage(errorType, row, column) {
 }
 
 function isTypeValid(type,value) {
+    if(type=="number") {
+        if( value ~ /^[0-9]+/) {
+            return "true"
+        } else {
+            return "false"
+        }
+    }
     if(type=="interger") {
         if(value ~ /^[0-9]{1,10}$/) {
             return "true"
@@ -47,7 +54,6 @@ function isTypeValid(type,value) {
     }
     if(type=="phoneNumber") {
         return "true"
-    }
     }
 }
 
