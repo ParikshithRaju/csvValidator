@@ -18,29 +18,36 @@ function printMessage(errorType, row, column) {
 }
 
 function isTypeValid(type,value) {
-    if(type=="number") {
-        if(value ~ /^[0-9]+$/) {
+    if(type=="interger") {
+        if(value ~ /^[0-9]{1,10}$/) {
+            return "true"
+        } else {
+            return "false"
+        }
+    }
+    if(type=="decimal") {
+        if(value ~ /^[0-9]{,10}\.[0-9]{1,10}$/) {
             return "true"
         } else {
             return "false"
         }
     }
     if(type=="email") {
-        if(value ~ /^[a-z][a-z0-9.]+@[a-z]+.com$/) {
+        if(value ~ /^[a-z][a-z0-9.]+@[a-z]+.[a-z]+$/) {
             return "true"
         } else {
              return "false"
         }
     }
     if(type=="string") {
-        if(value ~ /^[a-zA-Z]+$/) {
             return "true"
-        } else {
-           return "false" 
-        }
     }
     if(type=="date") {
         return "true"
+    }
+    if(type=="phoneNumber") {
+        return "true"
+    }
     }
 }
 

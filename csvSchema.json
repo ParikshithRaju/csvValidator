@@ -4,7 +4,7 @@
     "columnsToBeValidated": {
         "id": {
             "required": true,
-            "type": "number"
+            "type": "interger"
         },
         "firstName": {
             "required": true,
@@ -23,12 +23,12 @@
         },
         "phoneNum": {
             "required": false,
-            "type": "number",
+            "type": "phoneNumber",
             "length": 10
         },
         "salary": {
             "required": true,
-            "type": "number"
+            "type": "decimal"
         }
     }
 }
