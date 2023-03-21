@@ -34,24 +34,27 @@ function printMessage(errorType, row, column) {
 
 function isTypeValid(type,value) {
     if(type=="number") {
-        if(value ~ /^[0-9]+$/) {
+        if(value ~ /^(([0-9]*.[0-9]+)|[0-9]+)$/) {
             return "true"
         } else {
             return "false"
         }
     }
     if(type=="email") {
-        if(value ~ /^[a-z][a-z0-9.]+@[a-z]+.com$/) {
+        if(value ~ /^[a-z][a-z0-9.]+@[a-z]+.[a-z]+$/) {
             return "true"
         } else {
              return "false"
         }
     }
     if(type=="string") {
-        if(value ~ /^[a-zA-Z]+$/) {
+        return "true"
+    }
+    if(type=="phoneNumber") {
+        if(value ~ /^((+[0-9]{10,12})|([0-9]{10}))$/) {
             return "true"
         } else {
-           return "false" 
+            return "false"
         }
     }
     if(type=="date") {

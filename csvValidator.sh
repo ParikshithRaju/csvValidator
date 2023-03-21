@@ -2,7 +2,7 @@
 
 getColumnIndexByString () {
     cnt=1;
-    arrayOfColumnNames="$(echo ${1:0:-1}| tr ',' ' ')"
+    arrayOfColumnNames="$(echo $1| tr ',' ' ')"
     searchEle=${2:1:-1};
     for el in $arrayOfColumnNames
     do
@@ -60,4 +60,4 @@ _maxLengthValidationArray=${maxLengthValidationArray[@]}
 _minLengthValidationArray=${minLengthValidationArray[@]}
 _typeValidationArray=${typeValidationArray[@]}
 
-awk -F $delimiter -v isHeaderPresent="$isHeaderPresent" -v columnIndexs="$columnIndexs" -v _isRequiredValidationArray="$_isRequiredValidationArray" -v _lengthValidationArray="$_lengthValidationArray" -v _maxLengthValidationArray="$_maxLengthValidationArray" -v _minLengthValidationArray="$_minLengthValidationArray" -v _typeValidationArray="$_typeValidationArray" -f schemaValidator.awk $1
+gawk -F $delimiter -v isHeaderPresent="$isHeaderPresent" -v columnIndexs="$columnIndexs" -v _isRequiredValidationArray="$_isRequiredValidationArray" -v _lengthValidationArray="$_lengthValidationArray" -v _maxLengthValidationArray="$_maxLengthValidationArray" -v _minLengthValidationArray="$_minLengthValidationArray" -v _typeValidationArray="$_typeValidationArray" -f schemaValidator.awk $1
