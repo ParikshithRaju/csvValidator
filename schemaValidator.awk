@@ -1,19 +1,34 @@
+BEGIN {
+    len=split(columnIndexs,columnIndexsArr," ")
+    split(_isRequiredValidationArray,isRequiredValidationArr," ")
+    split(_lengthValidationArray,lengthValidationArr," ")
+    split(_minLengthValidationArray,minLengthValidationArr," ")
+    split(_maxLengthValidationArray,maxLengthValidationArr," ")
+    split(_typeValidationArray,typeValidationArr," ")
+}
+
+NR == 1 { 
+    split($0,columnsArr,",") 
+}
 
 function printMessage(errorType, row, column) {
     if(errorType=="required") {
-        print "Required field error: " "(" (isHeaderPresent=="true" ? (row-1) : row) "," column ")";
+        print "Mandatory field missing in column \"" (isHeaderPresent=="true" ? columnsArr[column] : column) "\" and row \"" (isHeaderPresent=="true" ? (row-1) : row) "\"\n"
     }
     if(errorType=="length") {
-        print "Length validation error:  " "(" (isHeaderPresent=="true" ? (row-1) : row) "," column ")";
+        print "Length mismatch in column \"" (isHeaderPresent=="true" ? columnsArr[column] : column) "\" and row \"" (isHeaderPresent=="true" ? (row-1) : row) "\""
+        print "Required length: " lengthValidationArr[column] ", Current length: " length($column) "\n"
     }
     if(errorType=="maxLength"){
-            print "Max length error: " "(" (isHeaderPresent=="true" ? (row-1) : row) "," column ")";
+        print "Field length greater than maxLength in column \"" (isHeaderPresent=="true" ? columnsArr[column] : column) "\" and row \"" (isHeaderPresent=="true" ? (row-1) : row) "\""
+        print "Max length: " maxLengthValidationArr[column] ", Current length: " length($column) "\n"
     }
     if(errorType=="minLength"){
-            print "Min length error: " "(" (isHeaderPresent=="true" ? (row-1) : row) "," column ")";
+        print "Field length lesser than minLength in column \"" (isHeaderPresent=="true" ? columnsArr[column] : column) "\" and row \"" (isHeaderPresent=="true" ? (row-1) : row) "\""
+        print "Min length: " minLengthValidationArr[column] ", Current length: " length($column) "\n"
     }
     if(errorType=="type"){
-        print "Type error: " "(" (isHeaderPresent=="true" ? (row-1) : row) "," column ")";
+        print "Type mismatch in column \"" (isHeaderPresent=="true" ? columnsArr[column] : column) "\" and row \"" (isHeaderPresent=="true" ? (row-1) : row) "\"\n"
     }
 }
 
@@ -57,20 +72,18 @@ function isTypeValid(type,value) {
     }
 }
 
+
 {
     if(isHeaderPresent!="true" || NR!=1) {
-        len=split(columnIndexs,columnIndexsArr," ")
-        split(_isRequiredValidationArray,isRequiredValidationArr," ")
-        split(_lengthValidationArray,lengthValidationArr," ")
-        split(_minLengthValidationArray,minLengthValidationArr," ")
-        split(_maxLengthValidationArray,maxLengthValidationArr," ")
-        split(_typeValidationArray,typeValidationArr," ")
         for(i=1;i<=len;i++) {
             if(isRequiredValidationArr[i] == "true") {
                 if($columnIndexsArr[i]=="" || $columnIndexsArr[i]=="\n" || $columnIndexsArr[i]=="\r") {
                     printMessage("required",NR,columnIndexsArr[i]);
                     continue
                 }
+            } else {
+                if($columnIndexsArr[i]=="" || $columnIndexsArr[i]=="\n" || $columnIndexsArr[i]=="\r")
+                    continue;
             }
             if(lengthValidationArr[i] != "null") {
                 if(length($columnIndexsArr[i]) != lengthValidationArr[i]){
