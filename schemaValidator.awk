@@ -58,7 +58,11 @@ function isTypeValid(type,value) {
         }
     }
     if(type=="date") {
-        return "true"
+        if(value ~ /^((0?[1-9])|([12][0-9])|30|31)\/((0?[1-9])|(1[0-2]))\/(([0-9]{4})|([0-9]{2}))$/) {
+            return "true"
+        } else {
+            return "false"
+        }
     }
 }
 
