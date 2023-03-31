@@ -53,11 +53,12 @@ getColumnKeysToBeValidated () {
 }
 
 
-keysToBeValidated="$(cat $2 | jq ".columnsToBeValidated | keys_unsorted" | tr ',' ' ' | tr ':' ' ')";
-arrayOfKeys=${keysToBeValidated:2:-2};
+keysToBeValidated="$(getColumnKeysToBeValidated)";
 isHeaderPresent="$(getValueOfPropetyWithQoutes "isHeaderPresent" $space_removed_json)";
 
 delimiterInJson="$(getValueOfPropertyWithQoutes "delimiter" $space_removed_json)"
+
+columnsToBeValidatedSchema="$(echo $trimmed_json | grep -oP "\"columnsToBeValidated\" *: *{.*?}[^,]")"
 
 if [[ $delimiterInJson == "null" ]];
 then
@@ -74,20 +75,19 @@ declare -a maxLengthValidationArray
 
 keyIndex=1
 IFS="#"
-for key in $arrayOfKeys
+for key in $keysToBeValidated
 do
     if [[ $key == "" ]]
     then
         continue;
     fi
     key=${key::-1}
-    columnSchema="$(jq ".columnsToBeValidated.${key}" $2)";
-    isRequiredTrue="$(echo $columnSchema | jq '.required')";
-    requiredLength="$(echo $columnSchema | jq '.length')";
-    minLength="$(echo $columnSchema | jq '.minLength')";
-    maxLength="$(echo $columnSchema | jq '.maxLength')";
-    typeVal="$(echo $columnSchema | jq '.type')";
-    requiredLength="$(getValueOfPropertyWithQoutes "")"
+    columnSchema="$(echo $columnsToBeValidatedSchema | grep -oP "\"$key\" *: *{.*?}" | grep -oP "{.*$")";
+    isRequiredTrue="$(getValueOfPropertyWithQoutes "required" "$columnSchema")";
+    requiredLength="$(getValueOfPropertyWithQoutes "length" "$columnSchema")";
+    minLength="$(getValueOfPropertyWithQoutes "minLength" "$columnSchema")";
+    maxLength="$(getValueOfPropertyWithQoutes "maxLength" "$columnSchema")";
+    typeVal="$(getValueOfPropertyWithQoutes "type" "$columnSchema")";
     columnsInCSV="$(sed -n '1p' $1)";
     if [[ $isHeaderPresent == "true" ]];
     then
