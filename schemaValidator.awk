@@ -1,3 +1,14 @@
+function isDateValid(dateString) {
+    ("date  -d" dateString " +%Y-%m-%d 2>/dev/null") | getline inputDate
+    close(("date -d " dateString " +%Y-%m-%d"))
+
+    if(inputDate==dateString) {
+        return "true"
+    } else {
+        return "false"
+    }
+}
+
 BEGIN {
     len=split(columnIndexs,columnIndexsArr," ")
     split(_isRequiredValidationArray,isRequiredValidationArr," ")
@@ -8,7 +19,7 @@ BEGIN {
 }
 
 NR == 1 { 
-    split($0,columnsArr,",") 
+    split($0,columnsArr,FS) 
 }
 
 function printMessage(errorType, row, column) {
